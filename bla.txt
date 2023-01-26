@@ -1,13 +1,7 @@
 echo "# gti-test" >> README.md
 git init
-git add README.md
-git commit -m "Init"
-git branch -M main
-git remote add origin git@github.com:maxmudovmustafa/gti-test.git
-git push -u origin main
-git remote add origin git@github.com:maxmudovmustafa/gti-test.git
-git branch -M main
-git push -u origin main
+// Dont add readme please
+//git add README.md
 for branch in $(git for-each-ref --format='%(refname:short)' refs/heads/); do {
   echo ****branch="${branch}"
   git checkout "${branch}"
@@ -21,6 +15,14 @@ else
     echo "Working directory has UNCOMMITTED CHANGES"
     
     report_conflict=("Branch name- $(git branch --show-current) 
+
+git commit -m "Init"
+git branch -M main
+git remote add origin git@github.com:maxmudovmustafa/gti-test.git
+git push -u origin main
+git remote add origin git@github.com:maxmudovmustafa/gti-test.git
+git branch -M main
+git push -u origin main
 
 Conflict files: 
 $(git diff --name-only --diff-filter=U)
