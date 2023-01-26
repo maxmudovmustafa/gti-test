@@ -1,0 +1,50 @@
+echo "# gti-test" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin git@github.com:maxmudovmustafa/gti-test.git
+git push -u origin main
+git remote add origin git@github.com:maxmudovmustafa/gti-test.git
+git branch -M main
+git push -u origin main
+for branch in $(git for-each-ref --format='%(refname:short)' refs/heads/); do {
+  echo ****branch="${branch}"
+  git checkout "${branch}"
+  git pull origin master
+  
+  if output="$(git status --porcelain)" && [ -z "$output" ]; then
+    echo "Working directory has CLEAN"
+    git push origin "${branch}"
+    git checkout master
+else 
+    echo "Working directory has UNCOMMITTED CHANGES"
+    
+    report_conflict=("Branch name- $(git branch --show-current) 
+
+Conflict files: 
+$(git diff --name-only --diff-filter=U)
+-----------------------------------------------------------
+")
+    echo "$report_conflict"
+    git reset --merge
+    git add .
+    git stash save
+
+    #git add .
+    #git commit -m "Merge with master"
+    #git push origin "${branch}"
+    git checkout master
+    git stash pop
+    echo "$report_conflict" >> report-file.txt
+    git add .
+    git stash save
+fi
+
+}
+done
+git stash pop
+report=(report-file.txt)
+
+curl -F document=@"$report" -F caption="Report Conflict files" https://api.telegram.org/bot1282139079:AAGxWsN3uZnBYW8bFbOP8hMZJT7t6L_0DGs/sendDocument?chat_id=194952542
+: > report-file.txt
